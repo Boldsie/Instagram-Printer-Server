@@ -15,7 +15,7 @@ class keychain
 	{
 
 		$manager = new DatabaseManager;
-		return $manager->settingsValueForKey("foursquare_token");;
+		return $manager->settingsValueForKey("foursquare_token");
 	}
 
 
