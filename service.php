@@ -3,7 +3,6 @@
 function createTable() {
 
     $db = new SQLite3('data.db');
-	$db->open('data.db', 0666);
     if (!$db) die ();
 	
 	// Create the table 
@@ -23,7 +22,6 @@ function createTable() {
 function tableExists() {
 
     $db = new SQLite3('data.db');
-    $db->open('data.db', 0666);
     if (!$db) die ();
 
 	$check = "SELECT name FROM sqlite_master WHERE type='table' AND name='Queue'";
@@ -36,7 +34,6 @@ function tableExists() {
 function requestPrintURL() {
 
     $db = new SQLite3('data.db');
-    $db->open('data.db', 0666);
     if (!$db) die ();
 	
 	$query = "SELECT * FROM Queue ORDER BY ROWID ASC LIMIT 1";
@@ -58,7 +55,6 @@ function requestPrintURL() {
 function printDatabase() {
 
     $db = new SQLite3('data.db');
-    $db->open('data.db', 0666);
     if (!$db) die ();
 
 	//Do the query
@@ -79,7 +75,6 @@ function printDatabase() {
 function addPrintURL($printURL) {
 
     $db = new SQLite3('data.db');
-    $db->open('data.db', 0666);
     if (!$db) die ();
     
 	$command = "INSERT INTO Queue VALUES(NULL,'$printURL')";
