@@ -1,9 +1,10 @@
 <?php
 
 function createTable() {
-  
-	$handle = sqlite_open('data.db', 0666, $error);
-	if (!$handle) die ($error);
+
+    $db = new SQLite3('data.db');
+	$db->open('data.db', 0666);
+    if (!$db) die ();
 	
 	// Create the table 
 	$command = "CREATE TABLE Queue(
@@ -11,57 +12,60 @@ function createTable() {
 	URL TEXT NOT NULL
 	)";
 
-	$ok = sqlite_exec($handle, $command, $error);
+	$ok = $db->exec($command);
 
-	if (!$ok) die("Cannot create database. $error. </br></br>");
+	if (!$ok) die("Cannot create database. </br></br>");
 	else echo "Database created successfully</br></br>";
 	
-	sqlite_close($handle);	
+	$db->close();	
 }
 
 function tableExists() {
-	
-	$handle = sqlite_open('data.db', 0666, $error);
-	if (!$handle) die ($error);
+
+    $db = new SQLite3('data.db');
+    $db->open('data.db', 0666);
+    if (!$db) die ();
 
 	$check = "SELECT name FROM sqlite_master WHERE type='table' AND name='Queue'";
-	$responce = sqlite_query($handle, $check);
-	$contents = sqlite_fetch_array($responce, SQLITE_ASSOC);
+	$response = $db->query($check);
+	$contents = $response->fetch(SQLITE_ASSOC);
 
 	return $contents;
 }
 
 function requestPrintURL() {
 
-	$handle = sqlite_open('data.db', 0666, $error);
-	if (!$handle) die ($error);
+    $db = new SQLite3('data.db');
+    $db->open('data.db', 0666);
+    if (!$db) die ();
 	
 	$query = "SELECT * FROM Queue ORDER BY ROWID ASC LIMIT 1";
-	$result = sqlite_query($handle, $query);
-	$row = sqlite_fetch_array($result, SQLITE_ASSOC); 
+	$result = $db->query($query);
+    $row = $result->fetch(SQLITE_ASSOC);
 
 	// If the table contains a row
 	if ($row) {
 		echo($row['URL']);
 		$query = "DELETE FROM Queue WHERE id=".$row['id'];
-		$result = sqlite_query($handle, $query);	
+		$result = $db->query($query);	
 	}
 
 /* 	else echo("Nothing to print."); */
 	
-	sqlite_close($handle);
+	$db->close();
 }
 
 function printDatabase() {
-	
-	$handle = sqlite_open('data.db', 0666, $error);
-	if (!$handle) die ($error);
+
+    $db = new SQLite3('data.db');
+    $db->open('data.db', 0666);
+    if (!$db) die ();
 
 	//Do the query
 	$query = "SELECT * FROM Queue";
-	$result = sqlite_query($handle, $query);
+	$result = $db->query($query);
 	//iterate over all the rows
-	while($row = sqlite_fetch_array($result, SQLITE_ASSOC)){
+	while($row = $result->fetch(SQLITE_ASSOC)){
     	//iterate over all the fields
     	foreach($row as $key => $val){
         	//generate output
@@ -69,21 +73,22 @@ function printDatabase() {
         }
     }
 
-    sqlite_close($handle);
+    $db->close();
 }
 
 function addPrintURL($printURL) {
-	
-	$handle = sqlite_open('data.db', 0666, $error);
-	if (!$handle) die ($error);
+
+    $db = new SQLite3('data.db');
+    $db->open('data.db', 0666);
+    if (!$db) die ();
     
 	$command = "INSERT INTO Queue VALUES(NULL,'$printURL')";
 
-	$responce = sqlite_exec($handle, $command);
-	if (!$responce) die("Cannot add print to queue.");
+	$response = $db->exec($command);
+	if (!$response) die("Cannot add print to queue.");
 	else echo "Print added to queue.";
 
-	sqlite_close($handle);
+	$db->close();
 }
 
 function usage() {
