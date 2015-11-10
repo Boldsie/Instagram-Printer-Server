@@ -124,7 +124,7 @@ class DatabaseManager
 
 		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Print WHERE PrintId = '$printId'");
-		$print = $query->fetch();
+		$print = $query->fetchArray();
 		unset($database);
 
 		return $print;
@@ -168,7 +168,7 @@ class DatabaseManager
 
 		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Print WHERE SubscriptionId = '$subscriptionId' ORDER BY PrintId DESC");
-		$print = $query->fetch();
+		$print = $query->fetchArray();
 		unset($database);
 
 		return $print;
@@ -198,7 +198,7 @@ class DatabaseManager
 
 		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Settings WHERE Key = '$key'");
-		$row = $query->fetch();
+		$row = $query->fetchArray();
 		unset($database);
 
 		return $row["Value"];
@@ -273,7 +273,7 @@ class DatabaseManager
 
 		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Subscription WHERE Active = '1' ORDER BY SubscriptionId DESC");
-		$subscription = $query->fetch();
+		$subscription = $query->fetchArray();
 		unset($database);
 
 		return $subscription;
@@ -317,7 +317,7 @@ class DatabaseManager
 
 		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM PrintQueue ORDER BY PrintId ASC");
-		$print = $query->fetch();
+		$print = $query->fetchArray();
 		unset($database);
 
 		return $print;
