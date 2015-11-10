@@ -26,7 +26,7 @@ function tableExists() {
 
 	$check = "SELECT name FROM sqlite_master WHERE type='table' AND name='Queue'";
 	$response = $db->query($check);
-	$contents = $response->fetch(SQLITE_ASSOC);
+	$contents = $response->fetchArray(SQLITE_ASSOC);
 
 	return $contents;
 }
@@ -38,7 +38,7 @@ function requestPrintURL() {
 	
 	$query = "SELECT * FROM Queue ORDER BY ROWID ASC LIMIT 1";
 	$result = $db->query($query);
-    $row = $result->fetch(SQLITE_ASSOC);
+    $row = $result->fetchArray(SQLITE_ASSOC);
 
 	// If the table contains a row
 	if ($row) {
@@ -61,7 +61,7 @@ function printDatabase() {
 	$query = "SELECT * FROM Queue";
 	$result = $db->query($query);
 	//iterate over all the rows
-	while($row = $result->fetch(SQLITE_ASSOC)){
+	while($row = $result->fetchArray(SQLITE_ASSOC)){
     	//iterate over all the fields
     	foreach($row as $key => $val){
         	//generate output
