@@ -71,7 +71,7 @@ class DatabaseManager
 		$create = $settings.$addKeys.$print.$subscription.$table;
 
 		$database = new SQLite3($this->databaseName);
-		$result = $database->queryExec($create);
+		$result = $database->exec($create);
 		unset($database);
 
 		if (!$result) die("Cannot create database as .");
