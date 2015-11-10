@@ -70,11 +70,11 @@ class DatabaseManager
 
 		$create = $settings.$addKeys.$print.$subscription.$table;
 
-		$database = new SQLiteDatabase($this->databaseName);
-		$result = $database->queryExec($create, $error);
+		$database = new SQLite3($this->databaseName);
+		$result = $database->queryExec($create);
 		unset($database);
 
-		if (!$result) die("Cannot create database as $error.");
+		if (!$result) die("Cannot create database as .");
 		else echo "Database created successfully";
 
 	}
@@ -95,7 +95,7 @@ class DatabaseManager
 
 		/* Returns print id */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "INSERT INTO Print (SubscriptionId, DateTaken, LargePrint, SmallPrint, InstagramLink, Username) VALUES('$subscriptionId', '$dateTaken', '$largePrintUrl', '$smallPrintUrl', '$instagramLink', '$username')";
 		$result = $database->query($command);
 		$printId = $database->lastInsertRowID();
@@ -108,7 +108,7 @@ class DatabaseManager
 	public function removePrint($printId)
 	{
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "DELETE FROM Print WHERE PrintId = '$printId'";
 		$result = $database->query($command);
 		unset($database);
@@ -122,7 +122,7 @@ class DatabaseManager
 
 		/* Returns print object */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Print WHERE PrintId = '$printId'");
 		$print = $query->fetch();
 		unset($database);
@@ -136,7 +136,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "UPDATE Print SET $property = '$value' WHERE PrintId = '$printId'";
 		$result = $database->query($command);
 		unset($database);
@@ -150,7 +150,7 @@ class DatabaseManager
 
 		/* Returns array of prints */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->arrayQuery("SELECT * FROM Print WHERE $property = '$value'");
 		$prints = new ArrayObject;
 		foreach ($query as $row) $prints->append($row);
@@ -166,7 +166,7 @@ class DatabaseManager
 
 		/* Returns print id */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Print WHERE SubscriptionId = '$subscriptionId' ORDER BY PrintId DESC");
 		$print = $query->fetch();
 		unset($database);
@@ -182,10 +182,9 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "UPDATE Settings SET Value = '$value' WHERE Key = '$key'";
-		$result = $database->query($command, $error);
-		echo $error;
+		$result = $database->query($command);
 		unset($database);
 
 		return $result;
@@ -197,7 +196,7 @@ class DatabaseManager
 
 		/* Returns value for key */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Settings WHERE Key = '$key'");
 		$row = $query->fetch();
 		unset($database);
@@ -213,7 +212,7 @@ class DatabaseManager
 
 		/* Returns subscription id */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "INSERT INTO Subscription (InstagramSubscription, Type, Value, GalleryTitle, LogoFilename, Active, Printing, DisplayGallery) VALUES('$instagramSubscription', '$type', '$value', '$galleryTitle', '$logoFilename', '$active', '$printing', '$displayGallery')";
 		$result = $database->query($command);
 		$subscriptionId = $database->lastInsertRowID();
@@ -228,7 +227,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "DELETE FROM Subscription WHERE SubscriptionId = '$subscriptionId'";
 		$result = $database->query($command);
 		unset($database);
@@ -242,7 +241,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "UPDATE Subscription SET $property = '$value' WHERE SubscriptionId = '$subscriptionId'";
 		$result = $database->query($command);
 		unset($database);
@@ -256,7 +255,7 @@ class DatabaseManager
 
 		/* Returns array of subscriptions */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->arrayQuery("SELECT * FROM Subscription WHERE $property = '$value'");
 		$subscriptions = new ArrayObject;
 		foreach ($query as $row) $subscriptions->append($row);
@@ -272,7 +271,7 @@ class DatabaseManager
 
 		/* Returns active subscription */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM Subscription WHERE Active = '1' ORDER BY SubscriptionId DESC");
 		$subscription = $query->fetch();
 		unset($database);
@@ -288,7 +287,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "INSERT INTO PrintQueue SELECT * FROM Print WHERE PrintId = '$printId'";
 		$result = $database->query($command);
 		unset($database);
@@ -302,7 +301,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "DELETE FROM PrintQueue WHERE PrintId = '$printId'";
 		$result = $database->query($command);
 		unset($database);
@@ -316,7 +315,7 @@ class DatabaseManager
 
 		/* Returns the print at the front og the print queue */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$query = $database->query("SELECT * FROM PrintQueue ORDER BY PrintId ASC");
 		$print = $query->fetch();
 		unset($database);
@@ -331,7 +330,7 @@ class DatabaseManager
 
 		/* Returns bool success */
 
-		$database = new SQLiteDatabase($this->databaseName);
+		$database = new SQLite3($this->databaseName);
 		$command = "DELETE FROM PrintQueue";
 		$result = $database->query($command);
 		unset($database);
